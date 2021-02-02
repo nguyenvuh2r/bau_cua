@@ -17,3 +17,13 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::prefix('game')->group(function() {
+    //Return all coin value
+    Route::get('/coins', function() {
+        $coins = ["10", "20", "50", "100", "200", "500"];
+        return json_encode($coins);
+    });
+
+    //Return all dice value
+});
