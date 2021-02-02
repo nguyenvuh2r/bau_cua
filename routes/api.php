@@ -26,4 +26,15 @@ Route::prefix('game')->group(function() {
     });
 
     //Return all dice value
+    Route::get('/dices', function() {
+        $dices = array(
+            'bau' => 'Bầu',
+            'cua' => 'Cua',
+            'tom' => 'Tôm',
+            'ca' => 'Cá',
+            'nai' => 'Nai',
+            'ga' => 'Gà'
+        );
+        return json_encode($dices);
+    });
 });
