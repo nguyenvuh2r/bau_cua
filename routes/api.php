@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GameController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -37,4 +38,10 @@ Route::prefix('game')->group(function() {
         );
         return json_encode($dices);
     });
+
+    Route::post('/bet', function() {
+
+    });
+
+    Route::get('/roll', [GameController::class, 'roll']);
 });
