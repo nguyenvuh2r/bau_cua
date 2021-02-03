@@ -48,6 +48,7 @@ class GameController extends Controller
                 }
                 $user->coin = $bet->coin;
                 $user->save();
+                UserBet::truncate();
             }
         }
 
