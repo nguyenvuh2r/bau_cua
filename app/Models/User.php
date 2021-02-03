@@ -12,7 +12,6 @@ class User extends Authenticatable implements JWTSubject
 {
     use HasFactory, Notifiable;
 
-
     /**
      * The attributes that are mass assignable.
      *
@@ -25,6 +24,7 @@ class User extends Authenticatable implements JWTSubject
     protected $hidden = [
         'password', 'remember_token',
     ];
+
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
@@ -44,8 +44,9 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
-    public function userbets()
+
+    public function userBet()
     {
-        return $this->hasMany(UserBet::class);
+        return $this->hasMany(UserBet::class, 'user_id', 'id');
     }
 }

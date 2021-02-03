@@ -10,7 +10,8 @@ class GameController extends Controller
 {
     public function roll()
     {
-        $results = [rand(0, 5), rand(0, 5), rand(0, 5)];
+        //$results = [rand(0, 5), rand(0, 5), rand(0, 5)];
+        $results = array(0,3,0);
         //Sort user de tranh query mot user nhieu lan
         $bets = UserBet::orderBy('id', 'DESC')->get();
         $user = null;
@@ -29,29 +30,28 @@ class GameController extends Controller
                 $user = User::find($bet->user_id);
             }
 
-            //Neu gia tri bet cua user ton tai trong result
-            if(in_array($bet->dice_value, $results))
+            $coin = $user->coin;
+            //Neu gia tri bet cua user khong ton tai trong result
+            if(!in_array($bet->dice_value, $results))
             {
-                $coin = $user->coin;
-
+                //Tru tien luon
+                $coin = $coin - $bet->coin;
+            }
+            else
+            {
                 //Duyet qua tung result de tinh tien
                 foreach($results as $re)
                 {
                     if($re == $bet->dice_value)
                     {
-                        $coin += $bet->coin;
-                    }
-                    else
-                    {
-                        $coin -= $bet->coin;
+                        $coin = $coin + $bet->coin;
                     }
                 }
-                $user->coin = $bet->coin;
-                $user->save();
-
             }
+            $user->coin = $coin;
+            $user->save();
         }
-        UserBet::truncate();
+        //UserBet::truncate();
         return $results;
     }
 }

@@ -8,9 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class UserBet extends Model
 {
     use HasFactory;
+    protected $table = 'user_bets';
+    protected $fillable = ['user_id', 'coin', 'dice_value'];
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 }
