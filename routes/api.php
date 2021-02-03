@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GameController;
+use App\Jobs\GameStateJob;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,40 +17,38 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-Route::prefix('game')->group(function () {
-    //Return all coin value
-    Route::get('/coins', function () {
-        $coins = ["10", "20", "50", "100", "200", "500"];
-        return json_encode($coins);
-    });
-
-    //Return all dice value
-    Route::get('/dices', function () {
-        $dices = array(
-            'bau' => 'Bầu',
-            'cua' => 'Cua',
-            'tom' => 'Tôm',
-            'ca' => 'Cá',
-            'nai' => 'Nai',
-            'ga' => 'Gà'
-        );
-        return json_encode($dices);
-    });
-
-    Route::post('/bet', function () {
-    });
-
-    Route::get('/roll', [GameController::class, 'roll']);
-});
 Route::post('login', [AuthController::class,'login']);
 Route::post('register', [AuthController::class,'register']);
 
 Route::group(['middleware' => 'auth:api'], function () {
+    Route::prefix('game')->group(function () {
+        //Return all coin value
+        Route::get('/coins', function () {
+            $coins = ["10", "20", "50", "100", "200", "500"];
+            return json_encode($coins);
+        });
 
-    Route::get('logout', [AuthController::class,'logout']);
-    Route::get('user-info', [AuthController::class,'getUser']);
+        //Return all dice value
+        Route::get('/dices', function () {
+            $dices = array(
+                'bau' => 'Bầu',
+                'cua' => 'Cua',
+                'tom' => 'Tôm',
+                'ca' => 'Cá',
+                'nai' => 'Nai',
+                'ga' => 'Gà'
+            );
+            return json_encode($dices);
+        });
+
+        Route::post('/bet', function () {
+        });
+
+        Route::get('/roll', [GameController::class, 'roll']);
+    });
+
+    Route::prefix('user')->group(function () {
+        Route::get('/logout', [AuthController::class,'logout']);
+        Route::get('/info', [AuthController::class,'getUser']);
+    });
 });
