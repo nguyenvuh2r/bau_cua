@@ -18,7 +18,7 @@ class GameController extends Controller
         {
             if($user)
             {
-                //Neu user hien tai khac da co
+                //Neu user hien tai khac da co roi ne
                 if($user->id != $bet->user_id)
                 {
                     $user = User::find($bet->user_id);
@@ -48,9 +48,10 @@ class GameController extends Controller
                 }
                 $user->coin = $bet->coin;
                 $user->save();
+
             }
         }
-
+        UserBet::truncate();
         return $results;
     }
 }
