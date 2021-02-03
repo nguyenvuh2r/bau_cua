@@ -14,6 +14,8 @@ class GameStateSeeder extends Seeder
      */
     public function run()
     {
-        GameState::create(['state' => 'stop']);
+        $state = new GameState();
+        $state->state = 'stop';
+        $state->save();
     }
 }
