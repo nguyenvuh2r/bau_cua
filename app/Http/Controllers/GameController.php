@@ -20,7 +20,7 @@ class GameController extends Controller
             ], 401);
         }
 
-        $user_bet = UserBet::where('user_id', $rq->user_id)->where('dice_value', $rq->dice_value);
+        $user_bet = UserBet::where('user_id', $rq->user_id)->where('dice_value', $rq->dice_value)->first();
         //Neu user da bet voi dice_value nay roi
         if($user_bet)
         {
@@ -37,6 +37,10 @@ class GameController extends Controller
             $user_bet->dice_value = $rq->dice_value;
             $user_bet->save();
         }
+
+        $user->coin = $user->coin - $rq->coin;
+        $user->save();
+
         return response()->json([
             'success' => true,
             'message'=>'Ok'
@@ -79,6 +83,7 @@ class GameController extends Controller
                 {
                     if($re == $bet->dice_value)
                     {
+                        //Neu trung thi tra lai tien trung thuong + tien da bet cua user
                         $coin = $coin + $bet->coin;
                     }
                 }
