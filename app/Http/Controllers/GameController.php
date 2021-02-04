@@ -15,7 +15,7 @@ class GameController extends Controller
         if($user->coin < $rq->coin)
         {
             return response()->json([
-                'success' => 'false',
+                'success' => false,
                 'message'=>'Not enough money'
             ], 401);
         }
@@ -38,7 +38,7 @@ class GameController extends Controller
             $user_bet->save();
         }
         return response()->json([
-            'success' => 'true',
+            'success' => true,
             'message'=>'Ok'
         ], 200);
     }

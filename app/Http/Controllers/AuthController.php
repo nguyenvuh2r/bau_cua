@@ -12,31 +12,30 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
-    //
     public $token = true;
 
     public function register(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'email' => 'required|email',
+            'password' => 'required',
+            'c_password' => 'required|same:password',
+        ]);
 
-         $validator = Validator::make($request->all(),
-                      [
-                      'name' => 'required',
-                      'email' => 'required|email',
-                      'password' => 'required',
-                      'c_password' => 'required|same:password',
-                     ]);
-
-         if ($validator->fails()) {
-
-               return response()->json(['error'=>$validator->errors()], 401);
-
-            }
-
+        if($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message'=>$validator->errors()
+            ], 401);
+        }
 
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = bcrypt($request->password);
+        $user->coin = 1000;
+        $user->total_game = 0;
         $user->save();
 
         if ($this->token) {
@@ -45,6 +44,7 @@ class AuthController extends Controller
 
         return response()->json([
             'success' => true,
+            'message' => 'Ok',
             'data' => $user
         ], HttpFoundationResponse::HTTP_OK);
     }
@@ -69,7 +69,6 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-
         $this->validate($request, [
             'token' => 'required'
         ]);
@@ -79,7 +78,7 @@ class AuthController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'User logged out successfully'
-            ]);
+            ], 200);
         } catch (JWTException $exception) {
             return response()->json([
                 'success' => false,
