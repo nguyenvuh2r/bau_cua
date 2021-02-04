@@ -41,8 +41,7 @@ Route::group(['middleware' => 'auth:api'], function () {
             return json_encode($dices);
         });
 
-        Route::post('/bet', function () {
-        });
+        Route::post('/bet', [GameController::class, 'bet']);
 
         Route::get('/roll', [GameController::class, 'roll']);
     });
