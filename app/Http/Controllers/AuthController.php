@@ -69,30 +69,22 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        $this->validate($request, [
-            'token' => 'required'
-        ]);
-
         try {
             JWTAuth::setToken($request->token)->invalidate();
             return response()->json([
                 'success' => true,
-                'message' => 'User logged out successfully'
+                'message' => 'Đăng xuất thành công!'
             ], 200);
         } catch (JWTException $exception) {
             return response()->json([
                 'success' => false,
-                'message' => 'Sorry, the user cannot be logged out',
-                'exception' => $exception
+                'message' => 'Có lỗi xảy ra khi cố đăng xuất!'
             ], HttpFoundationResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
     public function getUser(Request $request)
     {
-        $this->validate($request, [
-            'token' => 'required'
-        ]);
         return response()->json(JWTAuth::user());
     }
 }
